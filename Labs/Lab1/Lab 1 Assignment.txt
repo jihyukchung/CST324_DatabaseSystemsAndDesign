@@ -1,0 +1,113 @@
+-- Title: Lab 1 Assignment
+-- Author: Jihyuk Chung
+-- Class: CST 324
+-- Date: Sept 27, 2018
+-- Syntax: MySQL, SQL Server
+-- aura.cset.oit.edu
+
+-- 1) Show all of the names of the faculty that are making more than $20000.
+SELECT FirstName, LastName
+	FROM faculty
+	WHERE Salary > 20000;
+
+-- 2) Show all of the faculty names who make less than $10000 or more than $30000.
+SELECT FirstName, LastName
+	FROM faculty
+	WHERE Salary < 10000 OR Salary > 30000;
+	
+-- 3) Display the faculty name, phone number, and start date for all employees hired between September 1, 1999 and September 1, 2003. Order the output in ascending order by the start date.
+SELECT FirstName, LastName, Phone, Hiredate
+	FROM faculty
+	WHERE Hiredate >= '1999-09-01' AND Hiredate <= '2003-09-01';
+
+-- 4) Display all faculty members, in alphabetical order, for those people who work in departments 1, 2, and 4.
+SELECT FirstName, LastName
+	FROM faculty
+	WHERE DeptID = 1 OR DeptID = 2 OR DeptID = 4
+	ORDER BY FirstName;
+	
+-- 5) Display the name and hire date of every faculty member who was hired in 1999.
+SELECT FirstName, LastName, Hiredate
+	FROM faculty
+	WHERE Hiredate = 1999;
+	
+-- 6) Display the name and phone number for all faculty members who don't have a manager.
+SELECT FirstName, LastName, Phone
+	FROM faculty
+	WHERE SupervisorID IS NULL OR SupervisorID = '';
+	
+-- 7) Display the name, salary, and stipend for all faculty who earn stipends. Sort the data by ascending order on salary and stipend.
+SELECT FirstName, LastName, Salary, Stipend
+	FROM faculty
+	ORDER BY Salary ASC, Stipend ASC;
+
+-- 8) Display the names of the faculty whose third letter in their first name is an 'l'.
+SELECT FirstName, LastName
+	FROM faculty
+	WHERE FirstName like '\_\_\_l%';
+	
+-- 9) Display the names of all faculty who have two t's in their last name and are in department 1 or their manager is 1.
+SELECT FirstName, LastName
+	FROM faculty
+	WHERE LastName like '%t%t%' AND DeptID = 1 OR SupervisorID = 1;
+	
+-- 10) Display the name, salary for all faculty whose salary is not equal to $10000, $20000, or $30000.
+SELECT FirstName, LastName, Salary
+	FROM faculty
+	WHERE Salary != 10000, Salary != 20000, Salary != 30000;
+	
+-- 11) Display the current date and label the column Date.
+SELECT CURDATE() as Date;
+
+-- 12)	Display the faculty number, name, salary, and their salary increased by 15%. The raised salary should be displayed as a whole number.
+SELECT FacultyID, FirstName, LastName, CONVERT(INT, Salary * 1.15) as Increase
+	FROM faculty;
+	
+-- 13) Modify question 12 so that a new column is added to show the delta between the old salary and the new salary. Label the column Increase.
+SELECT FacultyID, FirstName, LastName, Salary, CONVERT(INT, Salary * 1.15) as Increase
+	FROM faculty;
+
+-- 14) Show the number of months worked for all employees. The number of months should be rounded to the nearest whole number. Sort, in ascending order, by the number of months worked. Label the column MONTHS_WORKED.
+SELECT FirstName, LastName, CONVERT(INT, DATEDIFF(DAY, CURDATE(), Hiredate)/30) as MONTHS_WORKED
+	FROM faculty;
+
+-- 15) Display the all faculty members in the following format: Caldwell earns $3,000.00 monthly but wants $15,000.00. (3 times their current monthly salary) Give the column the name Pipe Dream.
+SELECT FirstName + ' ' + LastName + ' earns ' + Salary + ' monthly but wants ' + Salary * 3 + '.' as PipeDream
+	FROM faculty; 
+
+-- 16) Display the name and salary for all faculty members. Format the salary to be 15 characters long, left-padded with $. Label the column salary.
+SELECT FirstName, LastName, LPAD(Salary, 15, '$') as salary
+	FROM faculty; 
+
+-- 17) Display the names, with only the first letter capitalized, and the length of their name for all faculty members whose last name starts with a C, A, or D.
+SELECT UPPER(LEFT(FirstName, 1)) + LOWER(SUBSTRING(FirstName, 2, LEN(FirstName)))
+	FROM faculty
+	WHERE LastName like 'C%' OR LastName like 'A%' OR LastName like 'D%';
+
+-- 18) Display the faculty name, hire date, and the day of the week they started. Order the results by the day of the week starting with Monday.
+SELECT FirstName, LastName, Hiredate, DATENAME(Hiredate, GETDATE()) as DOW
+	FROM faculty
+	WHERE DOW;
+
+-- 19) Display the name and stipend for all faculty members. If they don't have a stipend, display "Not a Director or Chair".
+SELECT FirstName, LastName, 
+	CASE WHEN Stipend IS NULL OR Stipend = '0'
+		THEN "Not a Director or Chair"
+		ELSE Stipend
+	END as Stipend
+FROM faculty;
+
+-- 20) Display the all faculty member’s last name followed by a row of asterisks which represent every $1000 of his or her salary. Order the data in descending order by their salaries.
+SELECT LPAD(REPLICATE('*', CONVERT(INT, Salary / 1000))) + LastName
+FROM faculty
+ORDER BY Salary DEC;
+
+-- 21) Write a query that displays the school each student belongs to. The school of HAS has the majors 3 and 4. The school of ETM has the majors 1 and 2.
+
+
+
+
+
+
+
+
