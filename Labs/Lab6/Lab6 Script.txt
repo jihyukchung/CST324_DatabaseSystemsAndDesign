@@ -1,0 +1,70 @@
+USE jihyukchung;
+Go
+
+IF  DB_ID('Lab6_TShirtsDB') IS NOT NULL
+    DROP DATABASE Lab6_TShirtsDB;
+
+CREATE DATABASE Lab6_TShirtsDB;
+GO
+
+USE MyGuitarShop;
+
+Create table UserTB
+(
+	UserID 			int				NOT NULL	constraint UserTB_pk primary key
+	EmailAddress	VARCHAR(255)	NOT NULL	UNIQUE
+	,FirstName		varchar(20)		NOT NULL	
+	,LastName		varchar(20)		NOT NULL
+	,PreferredName	varchar(20)
+	,PhoneNumber	varchar(15)
+);
+Create table USAddressTB
+(
+	AddrID	 		int				NOT NULL	constraint USAddressTB_pk primary key
+	,StreetAddr		varchar(40)		NOT NULL
+	,Optional		varchar(40)		
+	,City			varchar(21)		NOT NULL
+	,State			varchar(2)		NOT NULL
+	,CountryCode	varchar(3)		NOT NULL
+	,PostalCode		varchar(3)		NOT NULL
+);
+Create table OrderTB
+(
+	OrderID 		int				NOT NULL	constraint OrderTB_pk primary key
+	,UserID			int				NOT NULL	constraint OrderTB_UserTB_fk references UserTB(UserID)
+	,AddrID			int				NOT NULL	constraint OrderTB_USAddressTB_fk references USAddressTB(AddrID)
+	,ShippingCost	decimal(8, 2)				DEFAULT 5.00
+	,TotalCost		decimal(8, 2)	NOT NULL	// necessary?
+	,ShippingFlag	bit				NOT NULL
+);
+Create table SizeTB
+(
+	SizeID 			int				NOT NULL	constraint SizeTB_pk primary key
+	,ClothingSize	varchar(3)		NOT NULL
+);
+Create table TShirtsTB
+(
+	TShirtsID 		int							constraint TShirtsTB_pk primary key
+	,Name			varchar(20)		NOT NULL
+	,Brand			varchar(20)		NOT NULL
+	,Cost			decimal(8, 2)				DEFAULT 10
+	,StockQuantity	varchar(20)		NOT NULL
+);
+Create table Order_TShirts_IMT
+(
+	OrderID			int				NOT NULL	constraint Order_TShirts_OrderTB_fk references OrderTB(OrderID)
+	,TShirtsID		int				NOT NULL	constraint Order_TShirts_TShirts_fk references TShirtsTB(TShirtsID)
+	,OrderQuantity	int				NOT NULL	
+	,SizeID			int				NOT NULL	constraint Order_TShirts_SizeTB_fk references SizeTB(SizeID)
+	,constraint 	Order_TShirts_pk primary key (OrderID, TShirtsID)
+);
+
+INSERT INTO SizeTB (SizeID, ClothingSize) VALUES
+(1, 'XS'),
+(2, 'S'),
+(2, 'M'),
+(2, 'L'),
+(2, 'XL'),
+(2, '2XL'),
+(2, '3XL'),
+(2, '4XL');
